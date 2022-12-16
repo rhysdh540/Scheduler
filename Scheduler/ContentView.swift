@@ -93,9 +93,7 @@ struct ContentView: View {
                     Spacer().frame(height:60)
                     ForEach(0..<config.classNames.count, id: \.self) { i in
                         Text(config.classNames[i]).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
-                        if(i != config.classNames.count-1){
-                            Spacer()
-                        }
+                        if(i != config.classNames.count-1){ Spacer() }
                     }
                     Spacer().frame(height: 70)
                 }
@@ -165,6 +163,9 @@ struct ContentView: View {
                     }
                     Spacer()
                 }
+        }
+        private func getName(_ index: Int) -> String{
+            ["History", "Science", "Math", "Language", "English", "Elective"][index]
         }
     }
     
