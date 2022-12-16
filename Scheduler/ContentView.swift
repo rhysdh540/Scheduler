@@ -159,7 +159,7 @@ struct ContentView: View {
                     }
                     ForEach(0..<$data.classNames.count, id: \.self){ index in
                         Text("**Class \(index+1)**")
-                        TextField("", text: self.$userConfig.classNames[index]).frame(width:300)
+                        TextField(getName(index), text: self.$userConfig.classNames[index]).frame(width:300)
                     }
                     Spacer()
                 }
