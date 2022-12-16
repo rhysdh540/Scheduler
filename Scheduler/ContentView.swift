@@ -93,9 +93,7 @@ struct ContentView: View {
                     Spacer().frame(height:60)
                     ForEach(0..<config.classNames.count, id: \.self) { i in
                         Text(config.classNames[i]).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
-                        if(i != config.classNames.count-1){
-                            Spacer()
-                        }
+                        if(i != config.classNames.count-1){ Spacer() }
                     }
                     Spacer().frame(height: 70)
                 }
@@ -147,7 +145,6 @@ struct ContentView: View {
     
     struct SettingsView: View {
         @State var data: UserConfig = UserConfig.init()
-        @State private var names: [String] = ["History", "Science", "Math", "Language", "English", "Elective"]
         @State var input: [String] = UserConfig.init().classNames
 
         var body: some View {
@@ -160,10 +157,13 @@ struct ContentView: View {
                     }
                     ForEach(0..<$data.classNames.count, id: \.self){ index in
                         Text("**Class \(index+1)**")
-                        TextField(names[index], text: $data.classNames[index]).frame(width:300)
+                        TextField(getName(index), text: $data.classNames[index]).frame(width:200)
                     }
                     Spacer()
                 }
+        }
+        private func getName(_ index: Int) -> String{
+            ["History", "Science", "Math", "Language", "English", "Elective"][index]
         }
     }
     
