@@ -90,70 +90,49 @@ struct ContentView: View {
                     Button(action: toggleSidebar, label: {
                         Image(systemName: "sidebar.leading").resizable().aspectRatio(contentMode: .fit).frame(width:20)
                     }).buttonStyle(.plain)
-                    Group{
-                        Spacer().frame(height:60)
-                        Text(config.class1).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
-                        Spacer()
-                        Text(config.class2).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
-                        Spacer()
-                        Text(config.class3).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
+                    Spacer().frame(height:60)
+                    ForEach(0..<config.classNames.count, id: \.self) { i in
+                        Text(config.classNames[i]).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
+                        if(i != config.classNames.count-1){
+                            Spacer()
+                        }
                     }
-                    Group{
-                        Spacer()
-                        Text(config.class4).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
-                        Spacer()
-                        Text(config.class5).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
-                        Spacer()
-                        Text(config.class6).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
-                        Spacer().frame(height: 70)
-                    }
+                    Spacer().frame(height: 70)
                 }
                 VStack{
                     Spacer()
                     Text("Monday - Day \(monDay)")
-                    ForEach($data.monday, id: \.self) { $txt in
-                        TextEditor(text: $txt)
+                    ForEach(0..<data.monday.count, id: \.self) { index in
+                        TextEditor(text: self.$data.monday[index]).font(mainfont)
                     }
                 }
                 VStack{
                     Spacer()
                     Text("Tuesday - Day \(tuesDay)")
-                    TextEditor(text: $data.tuesdayC1).font(mainfont)
-                    TextEditor(text: $data.tuesdayC2).font(mainfont)
-                    TextEditor(text: $data.tuesdayC3).font(mainfont)
-                    TextEditor(text: $data.tuesdayC4).font(mainfont)
-                    TextEditor(text: $data.tuesdayC5).font(mainfont)
-                    TextEditor(text: $data.tuesdayC5).font(mainfont)
+                    ForEach(0..<data.tuesday.count, id: \.self) { index in
+                        TextEditor(text: self.$data.tuesday[index]).font(mainfont)
+                    }
                 }
                 VStack{
                     Spacer()
                     Text("Wednesday - Day \(wednesDay)")
-                    TextEditor(text: $data.wednesdayC1).font(mainfont)
-                    TextEditor(text: $data.wednesdayC2).font(mainfont)
-                    TextEditor(text: $data.wednesdayC3).font(mainfont)
-                    TextEditor(text: $data.wednesdayC4).font(mainfont)
-                    TextEditor(text: $data.wednesdayC5).font(mainfont)
-                    TextEditor(text: $data.wednesdayC6).font(mainfont)
+                    ForEach(0..<data.wednesday.count, id: \.self) { index in
+                        TextEditor(text: self.$data.wednesday[index]).font(mainfont)
+                    }
                 }
                 VStack{
                     Spacer()
                     Text("Thursday - Day \(thursDay)")
-                    TextEditor(text: $data.thursdayC1).font(mainfont)
-                    TextEditor(text: $data.thursdayC2).font(mainfont)
-                    TextEditor(text: $data.thursdayC3).font(mainfont)
-                    TextEditor(text: $data.thursdayC4).font(mainfont)
-                    TextEditor(text: $data.thursdayC5).font(mainfont)
-                    TextEditor(text: $data.thursdayC6).font(mainfont)
+                    ForEach(0..<data.thursday.count, id: \.self) { index in
+                        TextEditor(text: self.$data.thursday[index]).font(mainfont)
+                    }
                 }
                 VStack{
                     Spacer()
                     Text("Friday - Day \(friDay)")
-                    TextEditor(text: $data.fridayC1).font(mainfont)
-                    TextEditor(text: $data.fridayC2).font(mainfont)
-                    TextEditor(text: $data.fridayC3).font(mainfont)
-                    TextEditor(text: $data.fridayC4).font(mainfont)
-                    TextEditor(text: $data.fridayC5).font(mainfont)
-                    TextEditor(text: $data.fridayC6).font(mainfont)
+                    ForEach(0..<data.friday.count, id: \.self) { index in
+                        TextEditor(text: self.$data.friday[index]).font(mainfont)
+                    }
                 }
             }.padding([.leading, .trailing, .bottom])
         }
@@ -167,8 +146,10 @@ struct ContentView: View {
     }
     
     struct SettingsView: View {
-        @ObservedObject var data: UserConfig = UserConfig.init()
-        
+        @State var data: UserConfig = UserConfig.init()
+        @State private var names: [String] = ["History", "Science", "Math", "Language", "English", "Elective"]
+        @State var input: [String] = UserConfig.init().classNames
+
         var body: some View {
                 VStack{
                     Group{
@@ -177,21 +158,9 @@ struct ContentView: View {
                         TextField("1-6", text: $data.monDay).frame(width:30)
                         Spacer().frame(height:30)
                     }
-                    Group{
-                        Text("**Class 1**")
-                        TextField("History", text: $data.class1).frame(width:200)
-                        Text("**Class 2**")
-                        TextField("Science", text: $data.class2).frame(width:200)
-                        Text("**Class 3**")
-                        TextField("Math", text: $data.class3).frame(width:200)
-                    }
-                    Group{
-                        Text("**Class 4**")
-                        TextField("Language", text: $data.class4).frame(width:200)
-                        Text("**Class 5**")
-                        TextField("English", text: $data.class5).frame(width:200)
-                        Text("**Class 6**")
-                        TextField("Elective", text: $data.class6).frame(width:200)
+                    ForEach(0..<$data.classNames.count, id: \.self){ index in
+                        Text("**Class \(index+1)**")
+                        TextField(names[index], text: $data.classNames[index]).frame(width:300)
                     }
                     Spacer()
                 }
