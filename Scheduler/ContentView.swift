@@ -148,9 +148,10 @@ struct ContentView: View {
     struct SettingsView: View {
         @State var data: UserConfig = UserConfig.init()
         @State private var names: [String] = ["History", "Science", "Math", "Language", "English", "Elective"]
-        @State var input: [String] = UserConfig.init().classNames
+        @ObservedObject var userConfig = UserConfig()
 
         var body: some View {
+            
                 VStack{
                     Group{
                         Spacer()
@@ -160,7 +161,7 @@ struct ContentView: View {
                     }
                     ForEach(0..<$data.classNames.count, id: \.self){ index in
                         Text("**Class \(index+1)**")
-                        TextField(names[index], text: $data.classNames[index]).frame(width:300)
+                        TextField("", text: self.$userConfig.classNames[index]).frame(width:300)
                     }
                     Spacer()
                 }
