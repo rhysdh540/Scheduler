@@ -195,11 +195,25 @@ struct ContentView: View {
                 Group {
                     Text("**Test Info**").font(Font.custom("JetBrainsMonoNL-Regular", size: 40))
                     Spacer()
-                    AttributeEditor(displayName: "Display Name", thingToEdit: test.name)
-                    AttributeEditor(displayName: "Subject", thingToEdit: test.subject)
+                    Group {
+                        Text("Display Name")
+                        TextField(text: $test.name, label: { Text("Display Name") }).frame(width:200)
+                        Spacer().frame(height: 30)
+                    }
+                    Group {
+                        Text("Subject")
+                        TextField(text: $test.subject, label: { Text("Subject") }).frame(width: 200)
+                        Spacer().frame(height: 30)
+                    }
                     Group {
                         Text("Date")
-                        DatePicker(selection: $test.date, label: { Text("Date") }/*, displayedComponents: .date*/).frame(width: 200)
+                        DatePicker(
+                                selection: $test.date,
+                                label: {},
+                                displayedComponents: DatePickerComponents.date
+                        )
+                                /*.datePickerStyle(.graphical)*/
+                                .frame(width: 200)
                         Spacer().frame(height: 30)
                     }
                     Group {
@@ -208,17 +222,6 @@ struct ContentView: View {
                     }
                 }
                 Spacer()
-            }
-        }
-    }
-    struct AttributeEditor: View {
-        @State var displayName: String
-        @State var thingToEdit: Binding<String>
-        var body: some View{
-            VStack{
-                Text("**\(displayName)**")
-                TextField(displayName, text: thingToEdit).frame(width:200)
-                Spacer().frame(height:30)
             }
         }
     }
