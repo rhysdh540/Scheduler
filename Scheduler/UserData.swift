@@ -27,7 +27,7 @@ class UserData: ObservableObject {
     }
     init() {
         reminders = UserDefaults.standard.object(forKey: "reminders") as? String ?? ""
-        tests = UserDefaults.standard.object(forKey: "tests") as? [Test] ?? []
+        tests = UserDefaults.standard.object(forKey: "tests") as? [Test] ?? [.init("Data Lost", "", Date(), false, "")]
         homework = UserDefaults.standard.object(forKey: "homework") as? [[String]] ?? [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
     }
 }

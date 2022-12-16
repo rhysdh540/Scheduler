@@ -19,7 +19,7 @@ struct Option: Hashable {
     }
 }
 struct ContentView: View {
-    @State var currentOption = 0
+    @State var currentOption = 2
     @State private var data: UserData = UserData.init()
     let options: [Option] = [
         .init(newTitle: "Schedule", newImage: "calendar.circle", newImageS: "calendar.circle.fill"),
@@ -150,9 +150,55 @@ struct ContentView: View {
         }
     }
     struct TestView: View {
-        private let data = UserData()
+        @State private var selection: Int? = 0
+        @ObservedObject private var data = UserData()
         var body: some View{
-            Text("**Tests**").font(Font.custom("JetBrainsMonoNL-Regular", size: 40))
+            HStack {
+                VStack {
+                    HStack {
+                        Text("**Tests**").font(Font.custom("JetBrainsMonoNL-Regular", size: 30)).frame(height: 30)
+                        Spacer().frame(width: 10)
+                        Button(action: addTest, label: {
+                            Image(systemName: "plus.circle").resizable().aspectRatio(contentMode: .fit).frame(width: 15)
+                        }).buttonStyle(.plain)
+                    }
+                    List(selection: $selection, content: {
+                        ForEach(0..<data.tests.count, id: \.self) { index in
+                            Text(data.tests[index].name)
+                        }
+                    }).frame(width: 250)
+                }
+                VStack {
+                    Group {
+                        Text("**Test Info**").font(Font.custom("JetBrainsMonoNL-Regular", size: 40))
+                        Spacer()
+                        Group {
+                            Text("Display Name")
+                            TextField(text: $data.tests[selection ?? 0].name, label: { Text("Display Name") })
+                            Spacer().frame(height: 30)
+                        }
+                        Group {
+                            Text("Subject")
+                            TextField(text: $data.tests[selection ?? 0].subject, label: { Text("Subject") })
+                            Spacer().frame(height: 30)
+                        }
+                        Group {
+                            Text("Date")
+                            DatePicker(selection: $data.tests[selection ?? 0].date, label: { Text("Date") })
+                            Spacer().frame(height: 30)
+                        }
+                        Group{
+                            Toggle(isOn: $data.tests[selection ?? 0].isQuiz, label: { Text("Is it a quiz?") })
+                            Spacer().frame(height:30)
+                        }
+                    }
+                    Spacer()
+                }
+            }
+        }
+        private func addTest(){
+            data.tests.append(Test("New Test", "", Date(), false, ""))
+            selection = data.tests.count-1
         }
     }
 }
