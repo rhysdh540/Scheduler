@@ -24,8 +24,7 @@ struct ContentView: View {
     let options: [Option] = [
         .init(newTitle: "Schedule", newImage: "calendar.circle", newImageS: "calendar.circle.fill"),
         .init(newTitle: "Reminders", newImage: "list.bullet.rectangle", newImageS: "list.bullet.rectangle.fill"),
-            .init(newTitle: "Crash", newImage: "exclamationmark.3", newImageS: "exclamationmark."),
-        //.init(newTitle: "Tests", newImage: "doc.text", newImageS: "doc.text.fill"),
+        .init(newTitle: "Tests", newImage: "doc.text", newImageS: "doc.text.fill"),
         .init(newTitle: "Settings", newImage: "gearshape", newImageS: "gearshape.fill")
     ]
     var body: some View {
@@ -35,7 +34,7 @@ struct ContentView: View {
             switch currentOption{
             case 0: MainView()
             case 1: TextEditor(text: $data.reminders).font(Font.custom("JetBrainsMonoNL-Light", size: 18)).colorScheme(.dark).padding(10)
-            case 2: TestView()//Text("**Tests**").font(Font.custom("JetBrainsMonoNL-Regular", size: 40))
+            case 2: TestView()
             case 3: SettingsView()
             default: MainView()
             }
@@ -83,56 +82,27 @@ struct ContentView: View {
             let wednesDay = addOne(tuesDay)
             let thursDay = addOne(wednesDay)
             let friDay = addOne(thursDay)
-            HStack{
-                VStack{
-                    TextEditor(text:$hi).frame(width:0,height:0) // this is so the "selected" outline around the toggle sidebar button doesn't show up
-                    Spacer().frame(height:10)
+            TextEditor(text: $hi).frame(width: 0, height: 0)
+            Grid{
+                GridRow{
                     Button(action: toggleSidebar, label: {
                         Image(systemName: "sidebar.leading").resizable().aspectRatio(contentMode: .fit).frame(width:20)
                     }).buttonStyle(.plain)
-                    Spacer().frame(height:60)
-                    ForEach(0..<config.classNames.count, id: \.self) { i in
-                        Text(config.classNames[i]).frame(maxWidth: 100, alignment: .center).multilineTextAlignment(.center)
-                        if(i != config.classNames.count-1){ Spacer() }
-                    }
-                    Spacer().frame(height: 70)
-                }
-                VStack{
-                    Spacer()
                     Text("Monday - Day \(monDay)")
-                    ForEach(0..<data.monday.count, id: \.self) { index in
-                        TextEditor(text: self.$data.monday[index]).font(mainfont)
-                    }
-                }
-                VStack{
-                    Spacer()
                     Text("Tuesday - Day \(tuesDay)")
-                    ForEach(0..<data.tuesday.count, id: \.self) { index in
-                        TextEditor(text: self.$data.tuesday[index]).font(mainfont)
-                    }
-                }
-                VStack{
-                    Spacer()
                     Text("Wednesday - Day \(wednesDay)")
-                    ForEach(0..<data.wednesday.count, id: \.self) { index in
-                        TextEditor(text: self.$data.wednesday[index]).font(mainfont)
-                    }
-                }
-                VStack{
-                    Spacer()
                     Text("Thursday - Day \(thursDay)")
-                    ForEach(0..<data.thursday.count, id: \.self) { index in
-                        TextEditor(text: self.$data.thursday[index]).font(mainfont)
-                    }
-                }
-                VStack{
-                    Spacer()
                     Text("Friday - Day \(friDay)")
-                    ForEach(0..<data.friday.count, id: \.self) { index in
-                        TextEditor(text: self.$data.friday[index]).font(mainfont)
+                }
+                ForEach(0..<data.homework.count, id: \.self){ row in
+                    GridRow{
+                        Text(config.classNames[row]).multilineTextAlignment(.center).frame(maxWidth:100)
+                        ForEach(0..<data.homework[row].count, id: \.self){ col in
+                            TextEditor(text: $data.homework[row][col]).font(mainfont)
+                        }
                     }
                 }
-            }.padding([.leading, .trailing, .bottom])
+            }.padding([.trailing, .leading, .bottom])
         }
         private func toggleSidebar(){
             NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
@@ -157,11 +127,20 @@ struct ContentView: View {
                         Text("**Class \(index+1)**")
                         TextField(getName(index), text: self.$data.classNames[index]).frame(width:300)
                     }
-                    Spacer()
+                    Group {
+                        Spacer()
+                        Button(action: clear, label: {
+                            Text("Clear Homework Grid")
+                        })
+                        Spacer().frame(height:40)
+                    }
                 }
         }
         private func getName(_ index: Int) -> String{
             ["History", "Science", "Math", "Language", "English", "Elective"][index]
+        }
+        private func clear(){
+            UserDefaults.standard.removeObject(forKey: "homework")
         }
     }
     
@@ -170,39 +149,10 @@ struct ContentView: View {
             ContentView()
         }
     }
-}
-struct TestView: View {
-    private let data = UserData()
-    @State private var tests: [Test] = [
-        .init(newSubject: "hi", newDate: Date(), isQuiz: false, newNotes: "notes")
-    ]
-    @State private var selection = Set<UUID>()
-    @State private var currentSelection: Int
-    init(){
-        let test1 = Test(newSubject: "Math", newDate: Date(), isQuiz: false, newNotes: "rational functions")
-        tests = data.tests
-//        tests.append(test1)
-//        currentSelection = tests.isEmpty ? 0 : tests.count - 1
-        currentSelection = 0
-    }
-    var body: some View {
-            HStack {
-                List(tests, selection: $selection) { test in
-                    Text("\(test.subject) test on \(test.date)")
-                }.navigationTitle("Tests").font(Font.custom("JetBrainsMonoNL-Regular", fixedSize: 30)).frame(width: 300)
-                Spacer().frame(width: 20)
-                VStack{
-                    HStack {
-                        Spacer()
-                        Text(tests[currentSelection].subject).font(Font.custom("JetBrainsMonoNL-Regular", fixedSize: 30))
-                        Spacer()
-                    }
-                    TextField("Subject", text: $tests[currentSelection].subject)
-                    DatePicker("Date", selection: $tests[currentSelection].date)
-                    Toggle("Quiz", isOn: $tests[currentSelection].isQuiz)
-                    Text("Notes")
-                    TextEditor(text: $tests[currentSelection].notes)
-                }
-            }
+    struct TestView: View {
+        private let data = UserData()
+        var body: some View{
+            Text("**Tests**").font(Font.custom("JetBrainsMonoNL-Regular", size: 40))
+        }
     }
 }

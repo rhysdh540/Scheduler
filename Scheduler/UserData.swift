@@ -20,38 +20,14 @@ class UserData: ObservableObject {
                 UserDefaults.standard.set(tests, forKey: "tests")
         }
     }
-    @Published var monday: [String] {
+    @Published var homework: [[String]] {
         didSet {
-            UserDefaults.standard.set(monday, forKey: "monday")
-        }
-    }
-    @Published var tuesday: [String] {
-        didSet {
-            UserDefaults.standard.set(tuesday, forKey: "tuesday")
-        }
-    }
-    @Published var wednesday: [String] {
-        didSet {
-            UserDefaults.standard.set(wednesday, forKey: "wednesday")
-        }
-    }
-    @Published var thursday: [String] {
-        didSet {
-            UserDefaults.standard.set(thursday, forKey: "thursday")
-        }
-    }
-    @Published var friday: [String] {
-        didSet {
-            UserDefaults.standard.set(friday, forKey: "friday")
+            UserDefaults.standard.set(homework, forKey: "homework")
         }
     }
     init() {
         reminders = UserDefaults.standard.object(forKey: "reminders") as? String ?? ""
         tests = UserDefaults.standard.object(forKey: "tests") as? [Test] ?? []
-        monday = UserDefaults.standard.object(forKey: "monday") as? [String] ?? ["", "", "", "", "", ""]
-        tuesday = UserDefaults.standard.object(forKey: "tuesday") as? [String] ?? ["", "", "", "", "", ""]
-        wednesday = UserDefaults.standard.object(forKey: "wednesday") as? [String] ?? ["", "", "", "", "", ""]
-        thursday = UserDefaults.standard.object(forKey: "thursday") as? [String] ?? ["", "", "", "", "", ""]
-        friday = UserDefaults.standard.object(forKey: "friday") as? [String] ?? ["", "", "", "", "", ""]
+        homework = UserDefaults.standard.object(forKey: "homework") as? [[String]] ?? [["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""], ["", "", "", "", ""]]
     }
 }
