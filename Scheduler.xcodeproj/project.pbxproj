@@ -11,7 +11,6 @@
 		6DCC269229497DC1005F9F85 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCC269129497DC1005F9F85 /* UserData.swift */; };
 		6DCC2694294A1073005F9F85 /* project_fonts in Resources */ = {isa = PBXBuildFile; fileRef = 6DCC2693294A1073005F9F85 /* project_fonts */; };
 		6DCC2699294A6816005F9F85 /* UserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCC2698294A6816005F9F85 /* UserConfig.swift */; };
-		6DCC269E294AB32D005F9F85 /* RichTextKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6DCC269D294AB32D005F9F85 /* RichTextKit */; };
 		6DE8F8692947B291008EFC7E /* SchedulerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8F8682947B291008EFC7E /* SchedulerApp.swift */; };
 		6DE8F86B2947B291008EFC7E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE8F86A2947B291008EFC7E /* ContentView.swift */; };
 		6DE8F86D2947B294008EFC7E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DE8F86C2947B294008EFC7E /* Assets.xcassets */; };
@@ -61,7 +60,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6DCC269E294AB32D005F9F85 /* RichTextKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,7 +158,6 @@
 			);
 			name = Scheduler;
 			packageProductDependencies = (
-				6DCC269D294AB32D005F9F85 /* RichTextKit */,
 			);
 			productName = Scheduler;
 			productReference = 6DE8F8652947B291008EFC7E /* Scheduler.app */;
@@ -235,7 +232,6 @@
 			);
 			mainGroup = 6DE8F85C2947B291008EFC7E;
 			packageReferences = (
-				6DCC269C294AB32D005F9F85 /* XCRemoteSwiftPackageReference "RichTextKit" */,
 			);
 			productRefGroup = 6DE8F8662947B291008EFC7E /* Products */;
 			projectDirPath = "";
@@ -610,25 +606,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		6DCC269C294AB32D005F9F85 /* XCRemoteSwiftPackageReference "RichTextKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/danielsaidi/RichTextKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		6DCC269D294AB32D005F9F85 /* RichTextKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DCC269C294AB32D005F9F85 /* XCRemoteSwiftPackageReference "RichTextKit" */;
-			productName = RichTextKit;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6DE8F85D2947B291008EFC7E /* Project object */;
 }

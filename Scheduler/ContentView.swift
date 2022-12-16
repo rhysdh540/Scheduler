@@ -165,26 +165,30 @@ struct ContentView: View {
                     List(selection: $selection, content: {
                         ForEach(0..<data.tests.count, id: \.self) { index in
                             Text(data.tests[index].name)
+                                    .onTapGesture {
+                                        selection = index
+                                    }
                         }
                     }).frame(width: 250)
                 }
+                Spacer()
                 VStack {
                     Group {
                         Text("**Test Info**").font(Font.custom("JetBrainsMonoNL-Regular", size: 40))
                         Spacer()
                         Group {
                             Text("Display Name")
-                            TextField(text: $data.tests[selection ?? 0].name, label: { Text("Display Name") })
+                            TextField(text: $data.tests[selection ?? 0].name, label: { Text("Display Name") }).frame(width:200)
                             Spacer().frame(height: 30)
                         }
                         Group {
                             Text("Subject")
-                            TextField(text: $data.tests[selection ?? 0].subject, label: { Text("Subject") })
+                            TextField(text: $data.tests[selection ?? 0].subject, label: { Text("Subject") }).frame(width:200)
                             Spacer().frame(height: 30)
                         }
                         Group {
                             Text("Date")
-                            DatePicker(selection: $data.tests[selection ?? 0].date, label: { Text("Date") })
+                            DatePicker(selection: $data.tests[selection ?? 0].date, label: { Text("Date") }).frame(width:200)
                             Spacer().frame(height: 30)
                         }
                         Group{
@@ -194,6 +198,7 @@ struct ContentView: View {
                     }
                     Spacer()
                 }
+                Spacer()
             }
         }
         private func addTest(){
