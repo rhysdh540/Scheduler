@@ -129,8 +129,11 @@ struct ContentView: View {
                     }
                     Group {
                         Spacer()
-                        Button(action: clear, label: {
+                        Button(action: clearHW, label: {
                             Text("Clear Homework Grid")
+                        })
+                        Button(action: deleteTests, label: {
+                            Text("Delete All Tests")
                         })
                         Spacer().frame(height:40)
                     }
@@ -139,8 +142,11 @@ struct ContentView: View {
         private func getName(_ index: Int) -> String{
             ["History", "Science", "Math", "Language", "English", "Elective"][index]
         }
-        private func clear(){
+        private func clearHW(){
             UserDefaults.standard.removeObject(forKey: "homework")
+        }
+        private func deleteTests(){
+            UserDefaults.standard.removeObject(forKey: "tests")
         }
     }
     
@@ -150,7 +156,7 @@ struct ContentView: View {
         }
     }
     struct TestView: View {
-        @State private var selection: Int? = 0
+        @State private var currentSelection: Int = 0
         @ObservedObject private var data = UserData()
         var body: some View{
             HStack {
@@ -162,48 +168,58 @@ struct ContentView: View {
                             Image(systemName: "plus.circle").resizable().aspectRatio(contentMode: .fit).frame(width: 15)
                         }).buttonStyle(.plain)
                     }
-                    List(selection: $selection, content: {
+                    List(selection: $currentSelection, content: {
                         ForEach(0..<data.tests.count, id: \.self) { index in
                             Text(data.tests[index].name)
                                     .onTapGesture {
-                                        selection = index
+                                        currentSelection = index
                                     }
                         }
                     }).frame(width: 250)
                 }
                 Spacer()
-                VStack {
-                    Group {
-                        Text("**Test Info**").font(Font.custom("JetBrainsMonoNL-Regular", size: 40))
-                        Spacer()
-                        Group {
-                            Text("Display Name")
-                            TextField(text: $data.tests[selection ?? 0].name, label: { Text("Display Name") }).frame(width:200)
-                            Spacer().frame(height: 30)
-                        }
-                        Group {
-                            Text("Subject")
-                            TextField(text: $data.tests[selection ?? 0].subject, label: { Text("Subject") }).frame(width:200)
-                            Spacer().frame(height: 30)
-                        }
-                        Group {
-                            Text("Date")
-                            DatePicker(selection: $data.tests[selection ?? 0].date, label: { Text("Date") }).frame(width:200)
-                            Spacer().frame(height: 30)
-                        }
-                        Group{
-                            Toggle(isOn: $data.tests[selection ?? 0].isQuiz, label: { Text("Is it a quiz?") })
-                            Spacer().frame(height:30)
-                        }
-                    }
-                    Spacer()
-                }
+                TestEditorView(test: $data.tests[currentSelection])
                 Spacer()
             }
         }
         private func addTest(){
             data.tests.append(Test("New Test", "", Date(), false, ""))
-            selection = data.tests.count-1
+            currentSelection = data.tests.count-1
+        }
+    }
+
+    struct TestEditorView: View{
+        @Binding var test: Test
+        var body: some View{
+            VStack {
+                Group {
+                    Text("**Test Info**").font(Font.custom("JetBrainsMonoNL-Regular", size: 40))
+                    Spacer()
+                    AttributeEditor(displayName: "Display Name", thingToEdit: test.name)
+                    AttributeEditor(displayName: "Subject", thingToEdit: test.subject)
+                    Group {
+                        Text("Date")
+                        DatePicker(selection: $test.date, label: { Text("Date") }/*, displayedComponents: .date*/).frame(width: 200)
+                        Spacer().frame(height: 30)
+                    }
+                    Group {
+                        Toggle(isOn: $test.isQuiz, label: { Text("Is it a quiz?") })
+                        Spacer().frame(height: 30)
+                    }
+                }
+                Spacer()
+            }
+        }
+    }
+    struct AttributeEditor: View {
+        @State var displayName: String
+        @State var thingToEdit: Binding<String>
+        var body: some View{
+            VStack{
+                Text("**\(displayName)**")
+                TextField(displayName, text: thingToEdit).frame(width:200)
+                Spacer().frame(height:30)
+            }
         }
     }
 }
